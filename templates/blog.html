@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bloglar</title>
+</head>
+<body>
+{% for maqola in maqolalar %}
+  <h2>{{forloop.counter}}. <a href="/maqola/{{maqola.id}}">{{maqola.sarlavha}}</a></h2>
+{% endfor %}
+<br>
+<hr>
+<br>
+<h2>Maqola qo'shish</h2>
+    <form method="post">{% csrf_token %}
+        <input type="text" name="sarlavha" placeholder="Sarlavha">
+      <br>
+    <input type="date" name="sana" placeholder="Sana">
+      <br>
+    <input type="text" name="mavzu" placeholder="Mavzu" l>
+      <br>
+    <input type="text" name="matn" placeholder="Matn">
+      <br>
+        <button type="submit">Qo'shish</button>
+    </form>
+</body>
+</html>
