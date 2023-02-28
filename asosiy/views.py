@@ -6,6 +6,13 @@ from .models import *
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html')
+    def post(self, request):
+        user = authenticate(username = request.POST.get('l'),
+                            password = request.POST.get('p'))
+        if user is None:
+            return redirect("/")
+        login(request, user)
+        return redirect("/blog/")
 
 class RegisterView(View):
     def get(self, request):
@@ -33,10 +40,13 @@ class LogoutView(View):
 
 class BlogView(View):
     def get(self, request):
-        data = {
-            'maqolalar':Maqola.objects.all()
-        }
-        return render(request, 'blog.html', data)
+        if request.user.is_authenticated:
+            data = {
+                'maqolalar':Maqola.objects.filter(muallif__user=request.user)
+            }
+            return render(request, 'blog.html', data)
+        return redirect("/")
+
     def post(self, request):
         if request.user.is_authenticated:
             Maqola.objects.create(
@@ -51,38 +61,12 @@ class BlogView(View):
 
 class MaqolaView(View):
     def get(self, request, son):
-        data = {
-            'maqola':Maqola.objects.get(id=son)
-        }
-        return render(request, 'maqola.html', data)
+        if request.user.is_authenticated:
+            data = {
+                'maqola':Maqola.objects.get(id=son)
+            }
+            return render(request, 'maqola.html', data)
+        return redirect("/")
 
 
 
-
-
-# class Register(View):
-#     def post(self, request):
-#         if request.POST.get('p') == request.POST.get('cp'):
-#             user = User.objects.create_user(
-#                 username = request.POST.get('l'),
-#                 password = request.POST.get('p')
-#             )
-#             ism_f = request.POST.get('i')  # Eldor Shomurodov
-#             Talaba.objects.create(
-#                 ism = ism_f[:ism_f.find(" ")],
-#                 familiya = ism_f[ism_f.find(" ")+1:],
-#                 st_raqam = request.POST.get('st_r'),
-#                 kurs = request.POST.get('k'),
-#                 user = user
-#             )
-#             return redirect('/')
-
-# def post(self, request):
-    #     if request.POST.get('p') == request.POST.get('cp'):
-    #         User.objects.create_user(
-    #             username = request.POST.get('l'),
-    #             password = request.POST.get('p')
-    #         )
-    #     return redirect("/")
-    # def get(self, request):
-    #     return render(request, 'register.html')

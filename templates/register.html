@@ -5,7 +5,7 @@
     <title>Register</title>
 </head>
 <body>
-  <form>
+  <form method="post">{% csrf_token %}
     <input type="text" name="ism" placeholder="Ism">
       <br>
     <input type="number" name="yosh" placeholder="Yoshi">
@@ -14,9 +14,10 @@
       <br>
     <input type="text" name="l" placeholder="Login">
       <br>
-    <input type="text" name="p" placeholder="Parol">
+    <input type="password" name="p" placeholder="Parol">
     <br>
-    <input type="text" name="o_p" placeholder="Parol qayta">
+    <input type="password" name="o_p" placeholder="Parol qayta">
+    <button type="submit">Register</button>
   </form>
 
 </body>
